@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	<meta charset="utf-8">
+    <title>선교사코드 발급신청</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <!-- Navbar Start -->
+    <th:block th:include="/header"/>
+    <!-- Navbar End -->
+</head>
+<script>
+
+	function fn_submit(){
+		document.querySelector("#cbx_agreeYn");
+		const chk_agreeYn = cbx_agreeYn.checked;
+		if(!chk_agreeYn){
+			alert("동의 후 진행이 가능합니다. 동의합니다에 체크 해주세요.");
+			return ;
+		}
+		let formData = new FormData();
+			formData.append('userNm' ,  document.getElementById("userNm").value );
+			formData.append('birthYmd' , document.getElementById("birthYmd").value );
+			formData.append('marriedYn' , document.getElementById("marriedYn").value );
+			formData.append('spouseNm' , document.getElementById("spouseNm").value );
+			formData.append('phoneNum' , document.getElementById("phoneNum").value );
+			formData.append('email' , document.getElementById("email").value );
+			formData.append('countryCd' , document.getElementById("countryCd").value );
+			formData.append('locationNm' , document.getElementById("locationNm").value );
+			formData.append('ms1Cd' , document.getElementById("ms1Cd").value );
+			formData.append('ms2Cd' , document.getElementById("ms2Cd").value );
+			formData.append('ms3Cd' , document.getElementById("ms3Cd").value );
+			formData.append('msAgencyNm' , document.getElementById("msAgencyNm").value );
+			formData.append('msAgencyPhoneNum' , document.getElementById("msAgencyPhoneNum").value );
+			formData.append('msAgencyAddr' , document.getElementById("msAgencyAddr").value );
+			formData.append('dispatchAgencyCd' , document.getElementById("dispatchAgencyCd").value );
+			formData.append('dispatchAgencyNm' , document.getElementById("dispatchAgencyNm").value );
+			formData.append('dispatchAgencyPhoneNum1' , document.getElementById("dispatchAgencyPhoneNum1").value );
+			formData.append('dispatchDmnCd' , document.getElementById("dispatchDmnCd").value );
+			formData.append('dispatchDmnNm' , document.getElementById("dispatchDmnNm").value );
+			formData.append('dispatchAgencyPhoneNum2' , document.getElementById("dispatchAgencyPhoneNum2").value );
+			formData.append('dispatchChurchNm' , document.getElementById("dispatchChurchNm").value );
+			formData.append('dispatchYear' , document.getElementById("dispatchYear").value );
+
+		fn_save_fetch(formData);
+	}
+
+	function fn_save(params){
+		const xhttp = new XMLHttpRequest();
+		xhttp.open("POST", "/member");
+		//xhttp.setRequestHeader("Content-type", "application/form-data" ); //"Content-type", "application/json",    application/x-www-form-urlencoded" "multipart/form-data"
+		xhttp.send(params);
+	}
+
+	function fn_save_fetch(form){
+
+		fetch('/member', {
+		    method: 'POST',
+		    cache: 'no-cache',
+		    body: form // body 부분에 폼데이터 변수를 할당
+		})
+		.then(res => {
+				if(res.status == 200){
+					alert(res.result)
+				}else{
+					alert("FAIL : "+res.result);
+				}
+			}
+		)
+		//.then((data) => {
+		//    console.log(data);
+		//});
+	}
+
+
+
+</script>
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <th:block th:include="/navibar"/>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">WELCOME</h1>
+<!--                    <nav aria-label="breadcrumb">-->
+<!--                        <ol class="breadcrumb justify-content-center">-->
+<!--                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>-->
+<!--                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>-->
+<!--                            <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>-->
+<!--                        </ol>-->
+<!--                    </nav>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+    <!-- Contact Start -->
+    <div class="container-xxl">
+        <div class="container">
+            <div class="text-left wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="text-primary">새중앙선교센터 선교사코드 발급신청서</h1>
+                <h6 class="mb-2">※ 아래 내역을 작성해 주시면 확인 후 선교사코드를 발급해 드립니다.</h6>
+                <h6 class="mb-2">※ 선교사코드 신청 후에는 반드시 최근 6개월 이내에 발급받으신 파송증명서를 sjakmc@gmail.com 으로 보내주세요. 파송증명서를 확인 후 신청하신 선교사 코드를 승인해드립니다.</h6>
+                <h6 class="mb-2">※ 선교사코드는 승인 후 이메일로 발송 전달해 드립니다. 메일 확인시 스팸메일함도 함께 확인해 주세요.</h6>
+
+            </div>
+            <div class="row g-3 py-5">
+
+                <div class="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="row g-3">
+						<h3 class="text-primary">기본정보</h3>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="userNm" name="userNm" th:value="${vo.userNm}" placeholder="성명">
+                                <label for="userNm">성명</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" id="birthYmd" name="birthYmd" th:value="${vo.birthYmd}" placeholder="생년월일">
+                                <label for="birth">생년월일</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+
+                                <select class="form-control" name="marriedYn" id="marriedYn" th:field="${vo.marriedYn}">
+									<option value="">선택하세요</option>
+									<option value="Y">예</option>
+									<option value="N">아니오</option>
+
+								</select>
+								<label for="name">결혼여부</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="spouseNm" name="spouseNm" th:value="${vo.spouseNm}" placeholder="배우자이름">
+                                <label for="name">배우자이름</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="tel" class="form-control" id="phoneNum" name="phoneNum" th:value="${vo.phoneNum}" placeholder="국내연락처">
+                                <label for="tel">국내연락처</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" name="email" th:value="${vo.email}" placeholder="이메일">
+                                <label for="email">이메일</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-3 py-5">
+						<h3 class="text-primary">사역정보</h3>
+                         <div class="col-md-6">
+                            <div class="form-floating">
+
+                                <select class="form-control" name="countryCd" id="countryCd" th:field="${vo.countryCd}">
+									<option value="">선택하세요</option>
+									<option value="KO">대한민국</option>
+									<option value="MY">미얀마</option>
+									<option value="IN">인도네시아</option>
+									<option value="JP">일본</option>
+									<option value="MG">몽고</option>
+
+								</select>
+								<label for="name">국가</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="locationNm" id="locationNm" th:value="${vo.locationNm}" placeholder="도시이름">
+                                <label for="name">지역/도시</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                 <select class="form-control" name="ms1Cd" id="ms1Cd" th:field="${vo.ms1Cd}">
+									<option value="">선택하세요</option>
+									<option value="100">MK사역</option>
+									<option value="200">교회개척</option>
+									<option value="300">문서/출판</option>
+									<option value="400">문화/스포츠</option>
+									<option value="500">비즈니스</option>
+
+								</select>
+                                <label for="tel">주요사역1</label>
+                            </div>
+                        </div>
+                         <div class="col-md-4">
+                            <div class="form-floating">
+                                 <select class="form-control" name="ms2Cd" id="ms2Cd"  th:field="${vo.ms2Cd}">
+									<option value="">선택하세요</option>
+									<option value="100">MK사역</option>
+									<option value="200">교회개척</option>
+									<option value="300">문서/출판</option>
+									<option value="400">문화/스포츠</option>
+									<option value="500">비즈니스</option>
+
+								</select>
+                                <label for="tel">주요사역2</label>
+                            </div>
+                        </div>
+                         <div class="col-md-4">
+                            <div class="form-floating">
+                                 <select class="form-control" name="ms3Cd" id="ms3Cd"  th:field="${vo.ms3Cd}">
+									<option value="">선택하세요</option>
+									<option value="100">MK사역</option>
+									<option value="200">교회개척</option>
+									<option value="300">문서/출판</option>
+									<option value="400">문화/스포츠</option>
+									<option value="500">비즈니스</option>
+
+								</select>
+                                <label for="tel">주요사역3</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="msAgencyNm" name="msAgencyNm"   th:value="${vo.msAgencyNm}"  placeholder="사역기관명/단체명">
+                                <label for="name">현지사역기관 또는 단체 </label>
+                            </div>
+                        </div>
+                         <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="tel" class="form-control" id="msAgencyPhoneNum" name="msAgencyPhoneNum" th:value="${vo.msAgencyPhoneNum}" placeholder="전화번호 ">
+                                <label for="tel">현지사역기관 연락처 </label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="msAgencyAddr" name="msAgencyAddr" th:value="${vo.msAgencyAddr}" placeholder="Subject">
+                                <label for="addr">현지사역기관 주소 </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                    	<h3 class="text-primary">파송정보 </h3>
+                    	<div class="col-md-6">
+							<div class="row g-3">
+								<div class="col-md-6">
+	                                <div class="form-floating">
+	                                     <select class="form-control" name="dispatchAgencyCd" id="dispatchAgencyCd"  th:field="${vo.dispatchAgencyCd}" >
+											<option value="">선택하세요</option>
+											<option value="100">새중앙교회선교부</option>
+											<option value="200">예수전도단</option>
+											<option value="300">굿네이버스</option>
+											<option value="400">한국국제선교회</option>
+											<option value="ETC">기타</option>
+										</select>
+	                                    <label for="tel">파송단체(기관)</label>
+	                                </div>
+	                             </div>
+	                             <div class="col-md-6">
+	                                <div class="form-floating">
+	                                     <input type="text" class="form-control" id="dispatchAgencyNm" name="dispatchAgencyNm" th:value="${vo.dispatchAgencyNm}" placeholder="파송단체(기관)">
+	                                    <label for="tel">파송단체(기관)</label>
+	                                   </div>
+	                             </div>
+	                         </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="dispatchAgencyPhoneNum1" name="dispatchAgencyPhoneNum1" th:value="${vo.dispatchAgencyPhoneNum1}" placeholder="파송단체(기관) 연락처1">
+                                <label for="name">파송단체(기관) 연락처1</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+							<div class="row g-3">
+								<div class="col-md-6">
+	                                <div class="form-floating">
+	                                     <select class="form-control" name="dispatchDmnCd" id="dispatchDmnCd" th:field="${vo.dispatchDmnCd}">
+											<option value="">선택하세요</option>
+											<option value="100">합동총신</option>
+											<option value="200">백석대신</option>
+											<option value="300">통합</option>
+											<option value="400">개혁혁신</option>
+											<option value="ETC">기타</option>
+										</select>
+	                                    <label for="tel">파송교단</label>
+	                                </div>
+	                             </div>
+	                             <div class="col-md-6">
+	                                <div class="form-floating">
+	                                     <input type="text" class="form-control" id="dispatchDmnNm" name="dispatchDmnNm" th:value="${vo.dispatchDmnNm}" placeholder="파송교회 ">
+	                                    <label for="tel">파송교회</label>
+	                                   </div>
+	                             </div>
+	                         </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="dispatchAgencyPhoneNum2" th:value="${vo.dispatchAgencyPhoneNum2}" placeholder="파송단체(기관) 연락처2">
+                                <label for="name">파송단체(기관) 연락처2</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="dispatchChurchNm" th:value="${vo.dispatchChurchNm}" placeholder="파송교회">
+                                <label for="name">파송교회</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="dispatchYear" th:value="${vo.dispatchYear}" placeholder="파송연도 ">
+                                <label for="name">파송연도</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-12  py-5">
+						<div class="course-item bg-light">
+							<div class="p-4 pb-4">
+	                          	<h6 class="mb-2">1. 개인정보 수집에 동의합니다.</h6>
+				                <h6 class="mb-2">2. 위의 내용은 모두 사실이며, 사실과 다를 경우 새중앙선교센터 시설 이용이 제한될 수 있습니다.</h6>
+				                <label><input type="checkbox" name="agreeYn" id="cbx_agreeYn" value="1">
+				                <span style="font-weight: bold;">  위내용을 확인하였고 동의합니다.</span>
+				                </label>
+				            </div>
+		                </div>
+                    </div>
+                    <div class="col-12">
+                       <button class="btn btn-primary w-100 py-3" onclick="fn_submit()">신청하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+
+     <!-- Footer Start -->
+    <th:block th:include="/footer"/>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+</body>
+
+</html>

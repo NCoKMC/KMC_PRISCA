@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>코드찾기</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+   <!-- Navbar Start -->
+    <th:block th:include="/header"/>
+    <!-- Navbar End -->
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+     <th:block th:include="/navibar"/>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+   <!-- <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">로그인 페이지</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!-- Header End -->
+
+
+    <!-- Contact Start -->
+    <div class="container-xxl py-5"" wow fadeInUp" data-wow-delay="0.1s">
+       <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="text-primary">선교사코드 찾기</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+				<div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+					<div class="position-relative overflow-hidden">
+                        <form name="registForm" th:action="@{'/auth/findCode'}" method="POST" >
+                        <div class="row g-3" >
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="userNm" placeholder="Your Name">
+                                    <label for="name">성명</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" name="birthYmd" placeholder="Your birthDay">
+                                    <label for="name">생년월일</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" name="email" placeholder="Your Email">
+                                    <label for="email">Email</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 py-3">
+                                <button class="btn btn-primary w-100 py-4" type="submit">선교사코드 찾기</button>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    </div>
+                    <div class="container-xxl py-5 text-left wow fadeInUp" data-wow-delay="0.1s">
+		                <h6 class="mb-2">* 선교사코드 및 아래의 사항을 입력한 후 새중앙선교센터 이용 신청이 가능합니다.</h6>
+		                <h6 class="mb-2">* 선교사코드 분실 시, ‘코드찾기’를 이용하시거나, 전화(031-420-7400, 7440) 또는 이메일(sjakmc@gmail.com)로 문의바랍니다.</h6>
+		            </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <!-- Contact End -->
+
+
+    <!-- Footer Start -->
+    <th:block th:include="/footer"/>
+    <!-- Footer End -->
+
+
+
+</body>
+
+</html>

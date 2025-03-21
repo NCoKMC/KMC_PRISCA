@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.prisca.user.mapper.UserMapper">
+
+    <select id="selectUserListCnt" resultType="int">
+        SELECT COUNT(*) FROM KMC_USER_INFO
+    </select>
+
+    <select id="selectUserList" resultType="com.prisca.user.dto.UserDto">
+          SELECT
+        	KMC_CD 			AS kmcCd
+        	, EMAIL			AS email
+        	, PHONE_NUM		AS phoneNum
+        	, USER_NM		AS userNm
+        	, COUNTRY_CD	AS countryCd
+        	, BIRTH_YMD		AS birthYmd
+        	, STATUS_CD		AS statusCd
+        	, STAY_CD		AS stayCd
+		FROM KMC_USER_INFO
+    </select>
+
+    <select id="selectUserDetail" resultType="com.prisca.user.dto.UserDto">
+        SELECT
+        	KMC_CD 			AS kmcCd
+        	, EMAIL			AS email
+        	, PHONE_NUM		AS phoneNum
+        	, USER_NM		AS userNm
+        	, COUNTRY_CD	AS countryCd
+        	, BIRTH_YMD		AS birthYmd
+        	, STATUS_CD		AS statusCd
+        	, STAY_CD		AS stayCd
+		FROM KMC_USER_INFO
+		WHERE 1=1
+		AND KMC_CD = #{kmcCd}
+    </select>
+
+
+    <select id="selectUserByEmail" resultType="com.prisca.user.dto.UserDto">
+        SELECT
+        	KMC_CD 			AS kmcCd
+        	, EMAIL			AS email
+        	, PHONE_NUM		AS phoneNum
+        	, USER_NM		AS userNm
+        	, COUNTRY_CD	AS countryCd
+        	, BIRTH_YMD		AS birthYmd
+        	, STATUS_CD		AS statusCd
+        	, STAY_CD		AS stayCd
+		FROM KMC_USER_INFO
+		WHERE 1=1
+		AND EMAIL = #{email}
+
+    </select>
+
+    <select id="selectUserByPhoneNum" resultType="com.prisca.user.dto.UserDto">
+        SELECT
+        	KMC_CD 			AS kmcCd
+        	, EMAIL			AS email
+        	, PHONE_NUM		AS phoneNum
+        	, USER_NM		AS userNm
+        	, COUNTRY_CD	AS countryCd
+        	, BIRTH_YMD		AS birthYmd
+        	, STATUS_CD		AS statusCd
+        	, STAY_CD		AS stayCd
+		FROM KMC_USER_INFO
+		WHERE 1=1
+		AND PHONE_NUM = #{phoneNum}
+    </select>
+
+    <!-- 회원가입 -->
+    <insert id="insertUser" parameterType="com.prisca.user.dto.UserDto">
+		INSERT INTO KMC_USER_INFO(
+		KMC_CD,
+		EMAIL,
+		PHONE_NUM,
+		USER_NM,
+		COUNTRY_CD,
+		BIRTH_YMD,
+		STATUS_CD,
+		MARRIED_YN,
+		SPOUSE_NM,
+		LOCATION_NM,
+		MS1_CD,
+		MS2_CD,
+		MS3_CD,
+		MS_AGENCY_NM,
+		MS_AGENCY_PHONE_NUM,
+		MS_AGENCY_ADDR,
+		DISPATCH_AGENCY_CD,
+		DISPATCH_AGENCY_NM,
+		DISPATCH_DMN_NM,
+		DISPATCH_DMN_CD,
+		DISPATCH_CHURCH_NM,
+		DISPATCH_AGENCY_PHONE_1_NUM,
+		DISPATCH_AGENCY_PHONE_2_NUM,
+		DISPATCH_YEAR,
+		REG_DATE,
+		REG_ID
+		) VALUES (
+		fn_kmc_code_c('P'),
+		#{email},
+		#{phoneNum},
+		#{userNm},
+		#{countryCd},
+		REPLACE(#{birthYmd},'-',''),
+		'00',
+		#{marriedYn},
+		#{spouseNm},
+		#{locationNm},
+		#{ms1Cd},
+		#{ms2Cd},
+		#{ms3Cd},
+		#{msAgencyNm},
+		#{msAgencyPhoneNum},
+		#{msAgencyAddr},
+		#{dispatchAgencyCd},
+		#{dispatchAgencyNm},
+		#{dispatchDmnNm},
+		#{dispatchDmnCd},
+		#{dispatchChurchNm},
+		#{dispatchAgencyPhoneNum1},
+		#{dispatchAgencyPhoneNum2},
+		#{dispatchYear},
+		TO_CHAR(CURRENT_DATE,'YYYYMMDD'),
+		'ADM'
+		)
+    </insert>
+
+     <!-- 회원가입 -->
+    <insert id="insertUserAuth" parameterType="com.prisca.user.dto.UserAuthDto">
+		INSERT INTO KMC_USER_INFO(
+		KMC_CD,
+		KMC_PWD,
+		STATUS_CD
+		)VALUES(
+		#{kmcCd},
+		#{kmcPwd},
+		'00'
+
+		)
+
+
+    </insert>
+
+    <!-- 회원정보 수정 -->
+    <update id="updateUserPwd" parameterType="com.prisca.user.dto.UserAuthDto">
+        UPDATE KMC_USER_AUTH
+        SET user_pwd = #{kmcPwd}
+
+        WHERE m_cd = #{kmcCd}
+
+    </update>
+
+    <!-- 탈퇴 -->
+    <update id="updateUserStatus">
+        UPDATE KMC_USER_AUTH
+        SET status_cd = #{statusCd}
+
+        WHERE m_cd = #{kmcCd}
+
+    </update>
+
+
+
+
+</mapper>

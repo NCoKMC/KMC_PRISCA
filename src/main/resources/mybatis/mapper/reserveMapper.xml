@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.prisca.user.mapper.ReserveMapper">
+
+    <select id="selectResveManageList" resultType="com.prisca.user.dto.ReserveDto">
+
+        SELECT /*com.prisca.user.mapper.ReserveMapper.selectResveManageList */
+        	 RESV.ROOM_NO AS roomNo
+        	,RESV.KMC_CD AS kmcCd
+			,RESV.START_YMD	AS startYmd
+			,RESV.END_YMD	AS endYmd
+
+			,RESV_DATE as resvDate
+			,extract ('day' from TO_DATE(resv.start_ymd,'YYYYMMDD')) as startDay
+			,extract ('day' from TO_DATE(resv.end_ymd,'YYYYMMDD')) as endDay
+		FROM KMC_RESV_MANAGE RESV
+		WHERE 1=1
+
+
+	 		<if test="startYmd != null">
+		<![CDATA[ 		AND	START_YMD <= #{endYmd} ]]>
+			</if>
+			<if test="endYmd != null">
+		<![CDATA[ 		AND END_YMD >= #{startYmd} ]]>
+			</if>
+
+
+
+			<if test="roomNo != null">
+			AND RESV.ROOM_NO = #{roomNo}
+			</if>
+			<if test="mCd != null">
+			AND RESV.KMC_CD = #{mCd}
+			</if>
+		ORDER BY RESV.ROOM_NO
+    </select>
+
+
+    <select id="selectRoomResveList" resultType="com.prisca.user.dto.ReserveDto">
+
+        SELECT /*com.prisca.user.mapper.ReserveMapper.selectResveManageList */
+        	 RESV.ROOM_NO AS roomNo
+        	,RESV.KMC_CD AS kmcCd
+			,RESV.START_YMD	AS startYmd
+			,RESV.END_YMD	AS endYmd
+
+			,RESV_DATE as resvDate
+			,extract ('day' from TO_DATE(resv.start_ymd,'YYYYMMDD')) as startDay
+			,extract ('day' from TO_DATE(resv.end_ymd,'YYYYMMDD')) as endDay
+		FROM KMC_RESV_MANAGE RESV
+		WHERE 1=1
+
+
+	 		<if test="startYmd != null">
+		<![CDATA[ 		AND	START_YMD <= #{endYmd} ]]>
+			</if>
+			<if test="endYmd != null">
+		<![CDATA[ 		AND END_YMD >= #{startYmd} ]]>
+			</if>
+
+
+
+			<if test="roomNo != null">
+			AND RESV.ROOM_NO = #{roomNo}
+			</if>
+			<if test="mCd != null">
+			AND RESV.KMC_CD = #{mCd}
+			</if>
+		ORDER BY RESV.ROOM_NO
+    </select>
+
+    <select id="selectRoomResveOkList" resultType="com.prisca.user.dto.ReserveDto">
+
+		SELECT /*com.prisca.user.mapper.ReserveMapper.selectRoomResveOkList */
+			kr.ROOM_NO		AS roomNo
+			,kr.STATUS_CD	AS statusCd
+			,kr.USE_YN		AS useYn
+		 FROM KMC_ROOM kr
+			WHERE 1=1
+			AND kr.USE_YN  = 'Y'
+			AND kr.ROOM_NO NOT IN (
+			SELECT ROOM_NO  FROM KMC_RESV_MANAGE RESV
+			WHERE 1=1
+				 AND START_YMD 	<![CDATA[ <= ]]> #{endYmd}
+				 AND END_YMD 	<![CDATA[ >= ]]> #{startYmd}
+			)
+			ORDER BY kr.ROOM_NO
+    </select>
+
+    <!--예 -->
+    <insert id="insertReserveInfo" parameterType="com.prisca.user.dto.ReserveDto">
+		INSERT INTO KMC_RESV_MANAGE( /*com.prisca.user.mapper.ReserveMapper.insertReserveInfo */
+		  	ROOM_NO,
+		  	START_YMD,
+		  	END_YMD,
+		  	KMC_CD,
+		  	RESV_DATE
+		  )VALUES(
+		  	#{roomNo},
+		  	#{startYmd},
+		  	#{endYmd},
+		  	#{kmcCd},
+		  	TO_CHAR(CURRENT_DATE,'YYYYMMDD')
+		  )
+
+
+    </insert>
+
+    <insert id="insertFamilyInfo" parameterType="com.prisca.user.dto.UserFamilyDto">
+		  INSERT INTO PUBLIC.KMC_USER_FAMILY ( /*com.prisca.user.mapper.ReserveMapper.insertFamilyInfo */
+			  	KMC_CD,
+			  	F_SEQ,
+			  	F_NAME,
+			  	F_BIRTH_YMD,
+			  	F_RELATION,
+			  	F_GENDER,
+			  	F_RESV_YMD
+		  )VALUES(
+			  	#{kmcCd},
+			  	#{seq},
+			  	#{name},
+			  	#{birthYmd},
+			  	#{familyCd},
+			  	#{genderCd},
+			  	TO_CHAR(CURRENT_DATE,'YYYYMMDD')
+		  )
+
+
+    </insert>
+
+
+
+
+
+</mapper>

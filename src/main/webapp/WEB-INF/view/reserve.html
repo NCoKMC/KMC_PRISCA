@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	<meta charset="utf-8">
+    <title>선교센터 예약 </title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <!-- Navbar Start -->
+    <th:block th:include="/header"/>
+    <!-- Navbar End -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <script type="text/javascript">
+
+
+
+		$(function() {
+
+			  $('input[name="resvDate"]').daterangepicker({
+			      autoUpdateInput: false,
+			      locale: {
+			          cancelLabel: 'Clear'
+			      }
+			  });
+
+			  $('input[name="resvDate"]').on('apply.daterangepicker', function(ev, picker) {
+			      $('#startYmd').val(picker.startDate.format('YYYY-MM-DD')) ;
+			      $('#endYmd').val(picker.endDate.format('YYYY-MM-DD'));
+			  });
+
+			  $('input[name="resvDate"]').on('cancel.daterangepicker', function(ev, picker) {
+			      $('#startYmd').val('');
+			      $('#endYmd').val('');
+			  });
+
+
+				$('#peopleNum').on('change',  function(){
+					var p_cnt = $('#peopleNum option:selected').val();
+					//alert(p_cnt);
+					$('#family_info').empty();
+
+					if(p_cnt > 0){
+						$('#family_info').append('<h3 class="text-primary">가족정보</h3>');
+					}
+
+					for(var i=1; i<=p_cnt; i++) {
+
+					$('#family_info').append('<div class="row py-2" id="family" name="family"> '
+										+'<div class="col-md-3"> <div class="form-floating"> <input type="text" class="form-control" id="name" name="name"  placeholder="성명">  <label for="name">성명</label> </div>  </div>'
+				                              +' <div class="col-md-2"> <div class="form-floating"> '
+
+												  +' <select class="form-control" id="familyCd" name="familyCd"  >'
+												  	+ ' <option value="">선택하세요</option>'
+													+ ' <option value="F01">본인</option>'
+													+ ' <option value="F02">배우자</option>'
+													+ '	<option value="F10">자녀</option>'
+													+ '	<option value="F20">부모</option>'
+													+ ' <option value="F11">손주</option>'
+
+												+ ' </select>'
+												+ ' <label for="name">관계</label>  </div>  </div>'
+
+				                            +' <div class="col-md-2"> <div class="form-floating"> '
+				                                +'     <select class="form-control" id="gender" name="genderCd"  >'
+												+' 		<option value="">선택하세요</option>'
+												+' 		<option value="M">남 </option>'
+												+' 		<option value="F">여 </option>'
+												+' 	</select>'
+												+' 	<label for="name">성별</label> </div> </div>'
+
+
+				                            +' <div class="col-md-2"> <div class="form-floating"> '
+				                                 +'   <input type="date" class="form-control" id="birthYmd" name="birthYmd" placeholder="생년월일">'
+				                                 +'  <label for="birth">생년월일</label>'
+				                             +'   </div>'
+				                            +'</div>'
+											+'<div class="col-md-3">'
+				                                +'<div class="form-floating">'
+				                                +'    <input type="text" class="form-control" id="desc" name="desc" placeholder="비고">'
+				                                +'    <label for="desc">비고</label>'
+				                               +' </div>'
+				                           +' </div></div>'
+
+				                           );
+
+				                        };
+			});
+
+			$('#reserve').on('click',  function(){
+				var params = {};
+
+
+				var footholdCd = $('#footholdCd').val();
+				var peopleNum = $('#peopleNum').val();
+				var peopleList;
+				var startYmd = $('#startYmd').val();
+				var endYmd = $('#endYmd').val();
+
+
+				if(typeof footholdCd == "undefined" || footholdCd == "" || footholdCd == null){
+					alert("거점을 선택해주세요.");
+					return;
+				}
+
+				if(typeof peopleNum == "undefined" || peopleNum == "" || peopleNum == null){
+					alert("입실인원을 선택해주세요.");
+					return;
+				}
+
+				if(typeof startYmd == "undefined" || startYmd == "" || startYmd == null){
+					alert("시작일을 선택해주세요.");
+					return;
+				}
+
+				if(typeof endYmd == "undefined" || endYmd == "" || endYmd == null){
+					alert("종료일을 선택해주세요.");
+					return;
+				}
+
+				params.kmcCd = $('#kmcCd').val();
+				params.footholdCd        = footholdCd;
+				params.peopleNum       = peopleNum;
+				params.startYmd       = startYmd.replace(/-/gi,'');
+				params.endYmd         = endYmd.replace(/-/gi,'');
+
+
+				console.log('-----------------------------------------------');
+				var cnt = $("input[name='family']").length;
+				var f_Arr = new Array(cnt);
+				$("div[name='family']").each(function(index) {
+					//console.log('index = ' + index);
+					var name = $(this).find("input[name='name']").val();
+					var familyCd = $(this).find("select[name='familyCd']").val();
+					var genderCd = $(this).find("select[name='genderCd']").val();
+					var birthYmd = $(this).find("input[name='birthYmd']").val();
+					var desc = $(this).find("input[name='desc']").val();
+					console.log('birthYmd = ' + birthYmd);
+					var f_params = {};
+					f_params.name = name;
+					f_params.familyCd = familyCd;
+					f_params.genderCd = genderCd;
+					f_params.birthYmd = birthYmd.replace(/-/gi,'');;
+					f_params.desc = desc;
+					f_params.seq = index;
+
+					f_Arr.push(f_params);
+
+				});
+
+				$.each (f_Arr, function(i){
+					params['familyList['+i+'].name'] = this.name;
+					params['familyList['+i+'].familyCd'] = this.familyCd;
+					params['familyList['+i+'].genderCd'] = this.genderCd;
+					params['familyList['+i+'].birthYmd'] = this.birthYmd;
+					params['familyList['+i+'].desc'] = this.desc;
+					params['familyList['+i+'].seq'] = this.seq;
+
+				});
+
+
+
+				alert("save?");
+
+				$.ajax({
+					url : "/reserve"
+					,type: "POST"
+					,data: params
+					,success: function(data){
+						alert("저장했습니다.");
+					}
+				});
+			});
+
+		});
+	</script>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <th:block th:include="/navibar"/>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">WELCOME</h1>
+<!--                    <nav aria-label="breadcrumb">-->
+<!--                        <ol class="breadcrumb justify-content-center">-->
+<!--                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>-->
+<!--                            <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>-->
+<!--                            <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>-->
+<!--                        </ol>-->
+<!--                    </nav>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+    <!-- Contact Start -->
+    <div class="container-xxl">
+        <div class="container">
+            <div class="text-left wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="text-primary">새중앙선교센터 예약신청</h1>
+                <h6 class="mb-2">※ 선교사이용코드를 반드시 기억해 주세요. 선교사이용코드는 로그인 및 서비스이용시 사용되는 필수정보 입니다.</h6>
+                <h6 class="mb-2">※ 처음 방문하신 선교사님은 선교사코드발급과 숙박신청을 동시에 진행하실 수 있습니다.</h6>
+            </div>
+            <div class="row g-3 py-5">
+
+                <div class="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+
+                        <div class="row g-3">
+							<h3 class="text-primary">기본정보</h3>
+                            <div class="col-md-2 ">
+                                <div class="form-floating">
+
+                                    <select class="form-control" name="footholdCd" id="footholdCd" th:field="${vo.footholdCd}">
+										<option value="">선택하세요</option>
+										<option value="PY">평촌</option>
+										<option value="MO">몽골</option>
+										<option value="IS">이스라엘</option>
+									</select>
+									<label for="name">지역</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-floating">
+
+                                    <select class="form-control" name="peopleNum" id="peopleNum">
+										<option value="">선택하세요</option>
+										<th:block th:each="num : ${#numbers.sequence(1,8)}">
+											<option th:value="${num}" th:text="${num}" ></option>
+
+										</th:block>
+
+									</select>
+									<label for="name">입실인원 </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="startYmd" name="resvDate" th:value="${vo.startYmd}" placeholder="시작일">
+
+                                    <label for="birth">시작일</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="endYmd" name="resvDate" th:value="${vo.endYmd}" placeholder="종료일">
+
+                                    <label for="birth">종료일</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-floating">
+                                    <button class="btn btn-primary w-100 py-3" id="reserve">신청하기</button>
+                                </div>
+                            </div>
+                        </div>
+	 					<div class="row g-3 py-5" id="family_info">
+
+
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+
+     <!-- Footer Start -->
+    <th:block th:include="/footer"/>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.prisca.user.mapper.UserAuthMapper">
+
+
+
+	<select id="selectUserByKmcCd" parameterType="com.prisca.user.dto.UserAuthDto" resultType="com.prisca.user.dto.UserAuthDto">
+        SELECT /*com.prisca.user.mapper.UserAuthMapper.selectUserByKmcCd*/
+        	  KMC_CD 		AS kmcCd
+        	, KMC_PWD		AS kmcPwd
+        	, STATUS_CD		AS statusCd
+
+        FROM KMC_USER_AUTH
+		WHERE 1=1
+		AND KMC_CD = #{kmcCd}
+		AND KMC_PWD = #{kmcPwd}
+    </select>
+
+    <select id="selectUserByEmail" parameterType="com.prisca.user.dto.UserDto" resultType="com.prisca.user.dto.UserAuthDto">
+        SELECT/*com.prisca.user.mapper.UserMapper.selectUserByEmail*/
+        	A.KMC_CD 			AS kmcCd
+        	, A.KMC_PWD			AS kmcPwd
+        	, A.STATUS_CD		AS statusCd
+        	, B.email			AS email
+			FROM KMC_USER_AUTH A, KMC_USER_INFO B
+			WHERE 1=1
+				AND A.KMC_CD = B.KMC_CD
+				AND B.EMAIL = #{email}
+				AND B.BIRTH_YMD = REPLACE(#{birthYmd},'-','')
+
+
+    </select>
+
+    <select id="selectUserInfo" parameterType="com.prisca.user.dto.UserAuthDto" resultType="com.prisca.user.dto.UserDto">
+        SELECT
+        	  KMC_CD 		AS kmcCd
+        	, EMAIL			AS email
+        	, USER_NM		as userNm
+        	, PHONE_NUM		AS phoneNum
+        	, COUNTRY_CD	AS countryCd
+        	, BIRTH_YMD		AS birthYmd
+        	, STATUS_CD		AS statusCd
+        	, STAY_CD		AS stayCd
+        FROM KMC_USER_INFO
+		WHERE 1=1
+		AND KMC_CD = #{kmcCd}
+    </select>
+
+
+     <!-- kmc_code regist -->
+    <insert id="insertUserAuth" parameterType="com.prisca.user.dto.UserAuthDto">
+		INSERT INTO KMC_USER_AUTH(
+		KMC_CD,
+		KMC_PWD,
+		STATUS_CD
+		)VALUES(
+		#{kmcCd},
+		#{kmcPwd},
+		#{statusCd}
+
+		)
+
+
+    </insert>
+
+    <!-- 회원정보 수정 -->
+    <update id="updateUserAuth" parameterType="com.prisca.user.dto.UserAuthDto">
+        UPDATE KMC_USER_AUTH
+        SET KMC_PWD = #{kmcPwd}
+		,STATUS_CD = #{statusCd}
+        WHERE KMC_CD = #{kmcCd}
+
+    </update>
+
+
+
+    <!-- 탈퇴 -->
+    <update id="updateUserAuthStatus" parameterType="com.prisca.user.dto.UserAuthDto">
+        UPDATE KMC_USER_AUTH
+        SET STATUS_CD = '30'
+        WHERE KMC_CD = #{kmcCd}
+        AND KMC_PWD = #{kmcPwd}
+    </update>
+
+
+
+
+</mapper>

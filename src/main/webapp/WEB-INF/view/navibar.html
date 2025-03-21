@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="/index" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h2 class="m-0 text-primary"><i class="fa"></i>새중앙교회 선교센터</h2>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div th:if="${session.loginUser != null}" class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="../index" class="nav-item nav-link active">Home</a>
+                <a href="../intro" class="nav-item nav-link">새중앙교회 선교센터 소개</a>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu fade-down m-0">
+                        <a href="../myPage" class="dropdown-item">My Page</a>
+                        <a href="../reserve" class="dropdown-item">예약 </a>
+
+                    </div>
+                </div>
+                <a href="#" class="nav-item nav-link">[[${session.loginUser.userNm}]]님 안녕하세요.</a>
+                <input type="text" class="form-control" id="kmcCd" style="display: none;" th:value="${session.loginUser.kmcCd}">
+              <!--  <a href="../member" class="nav-item nav-link" style="display: block;" >송재형님 안녕하세요.</a>-->
+            </div>
+            <a href="/auth/logout" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" >로그아웃<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+        <div th:if="${session.loginUser == null}" class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="../index" class="nav-item nav-link active">Home</a>
+                <a href="../intro" class="nav-item nav-link">새중앙교회 선교센터 소개</a>
+                <a href="../member" class="nav-item nav-link">선교사코드 신청하기</a>
+              <!--  <a href="../member" class="nav-item nav-link" style="display: block;" >송재형님 안녕하세요.</a>-->
+            </div>
+            <a href="/auth/login" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" >로그인<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+
+
+    </nav>
+    <!-- Navbar End -->
+
+
+
+
+
+</html>
